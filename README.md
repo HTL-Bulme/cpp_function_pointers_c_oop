@@ -47,57 +47,57 @@ IntArray* ones(std::size_t dimension);
 IntArray* range(int start, int stop);
 
 //! Free the array and the IntArray struct; return `nullptr`.
-IntArray* destruct(IntArray* ia);
+IntArray* destruct(IntArray* self);
 
 //! Remove and return last element of `ia`
-int pop_back(IntArray* ia);
+int pop_back(IntArray* self);
 
 /*! Add `elem` to `ia`.
  *
  * If that would exceed the available reserved memory, double the size of
  * the array.
  */
-void push_back(IntArray* ia, int elem);
+void push_back(IntArray* self, int elem);
 
 /*! Insert `elem` before element at index.
  *
  * If that would exceed the available reserved memory, double the size of
  * the array.
  */
-void insert(IntArray* ia, std::size_t index, int elem);
+void insert(IntArray* self, std::size_t index, int elem);
 
 //! Return the number of occurrences of `elem` in `ia`.
-std::size_t count(IntArray* ia, int elem);
+std::size_t count(const IntArray* self, int elem);
 
 /*!
  * Return element at index.
  * If the index is out of bounds, write "IndexError" and some useful context
  * to stderr and terminate the execution of the program.
  */
-int index(IntArray* ia, std::size_t index);
+int index(const IntArray* self, std::size_t index);
 
 //! Print a representation of the array to stdout.
-void print(IntArray* ia);
+void print(const IntArray* self);
 
 //! Return the current number of elements.
-std::size_t size(IntArray* ia);
+std::size_t size(const IntArray* self);
 
 //! Return the sum of all elements.
-long int sum(IntArray* ia);
+long int sum(const IntArray* self);
 
 /*
  * Return new `IntArray*` where all elements are the pairwise sum of the
  * elements of the given two arrays. If one array is shorter,
  * solely use the elements of the longer array for the higher indices.
  */
-IntArray* add(IntArray* first, IntArray* second);
+IntArray* add(const IntArray* first, const IntArray* second);
 
 /*
  * Return new `IntArray*` where all elements are the pairwise product of the
  * elements of the given two arrays. If one array is shorter,
  * solely use the elements of the longer array for the higher indices.
  */
-IntArray* mul(IntArray* first, IntArray* second);
+IntArray* mul(const IntArray* first, const IntArray* second);
 ```
 
 All of the above functions must ensure that the data stored in the struct is

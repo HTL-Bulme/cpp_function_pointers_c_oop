@@ -10,17 +10,14 @@
 
 using ia::IntArray, ia::construct, ia::zeros, ia::ones, ia::range;
 
+// TODO: adjust tests to ensure const correctness
+
 struct IntArrayFixture {
 public:
   IntArrayFixture() {
-    ia_empty = new IntArray;
-    ia_empty->__reserved = 10;
-    ia_empty->__elements = 0;
-    ia_empty->__array = new int[10];
+    ia_empty = construct(10);
 
-    ia_12345 = new IntArray;
-    ia_12345->__array = new int[10];
-    ia_12345->__reserved = 10;
+    ia_12345 = construct(10);
     ia_12345->__elements = 5;
     ia_12345->__array[0] = 1;
     ia_12345->__array[1] = 2;
@@ -28,9 +25,7 @@ public:
     ia_12345->__array[3] = 4;
     ia_12345->__array[4] = 5;
 
-    ia_567 = new IntArray;
-    ia_567->__array = new int[10];
-    ia_567->__reserved = 10;
+    ia_567 = construct(10);
     ia_567->__elements = 3;
     ia_567->__array[0] = 5;
     ia_567->__array[1] = 6;
@@ -47,7 +42,7 @@ public:
   }
 
   IntArray* ia_empty = nullptr;
-  IntArray* ia_12345;// = nullptr;
+  IntArray* ia_12345 = nullptr;
   IntArray* ia_567 = nullptr;
 };
 
@@ -171,8 +166,7 @@ TEST_CASE("int_array", "[range]") {
 // There is no real way to check if `delete` was called, so the only check made
 // is whether the pointers have been set to nullptr.
 TEST_CASE("int_array", "[destruct]") {
-  IntArray* ia = new IntArray;
-  ia->__array = new int[5];
+  IntArray* ia = construct(5);
   IntArray* ia_ptr = ia;  // allow to reference member of destroyed object
   ia = ia->destruct(ia);
   CHECK(ia_ptr->__array == nullptr);
@@ -181,10 +175,8 @@ TEST_CASE("int_array", "[destruct]") {
 
 
 TEST_CASE("int_array", "[push_back]") {
-  IntArray* ia = new IntArray;
-  ia->__reserved = 2;
+  IntArray* ia = construct(2);
   ia->__elements = 1;
-  ia->__array = new int[ia->__reserved];
   ia->__array[0] = 10;
 
   ia->push_back(ia, 15);
@@ -206,10 +198,8 @@ TEST_CASE("int_array", "[push_back]") {
 
 
 TEST_CASE("int_array", "[insert]") {
-  IntArray* ia = new IntArray;
-  ia->__reserved = 2;
+  IntArray* ia = construct(2);
   ia->__elements = 1;
-  ia->__array = new int[ia->__reserved];
   ia->__array[0] = 10;
 
   ia->insert(ia, 0, 15);
@@ -231,75 +221,76 @@ TEST_CASE("int_array", "[insert]") {
 
 
 TEST_CASE_METHOD(IntArrayFixture, "int_array", "[pop_back]") {
-  int val = pop_back(ia_567);
+  int val = ia_567->pop_back(ia_567);
   CHECK(ia_567->__elements == 2);
   CHECK(ia_567->__array[0] == 5);
   CHECK(ia_567->__array[1] == 6);
   CHECK(val == 7);
 
-  val = ia->pop_back(ia_567);
+  val = ia_567->pop_back(ia_567);
   CHECK(ia_567->__elements == 1);
   CHECK(ia_567->__array[0] == 5);
   CHECK(val == 6);
 
-  val = ia->pop_back(ia_567);
+  val = ia_567->pop_back(ia_567);
   CHECK(ia_567->__elements == 0);
   CHECK(val == 5);
 }
 
 
 TEST_CASE_METHOD(IntArrayFixture, "int_array", "[size]") {
-  CHECK(ia->size(ia_12345) == 5);
-  CHECK(ia->size(ia_567) == 3);
+  const IntArray* arr = ia_12345;  // test const correctness
+  CHECK(arr->size(arr) == 5);
+  CHECK(ia_567->size(ia_567) == 3);
 }
 
 
 TEST_CASE_METHOD(IntArrayFixture, "int_array", "[count]") {
   SECTION("unique elements") {
-    CHECK(ia->count(ia_12345, 1) == 1);
-    CHECK(ia->count(ia_12345, 2) == 1);
-    CHECK(ia->count(ia_12345, 3) == 1);
-    CHECK(ia->count(ia_12345, 4) == 1);
-    CHECK(ia->count(ia_12345, 5) == 1);
-    CHECK(ia->count(ia_12345, 6) == 0);
-    CHECK(ia->count(ia_12345, 0) == 0);
-    CHECK(ia->count(ia_12345, -1) == 0);
-    CHECK(ia->count(ia_12345, -2) == 0);
+    CHECK(ia_12345->count(ia_12345, 1) == 1);
+    CHECK(ia_12345->count(ia_12345, 2) == 1);
+    CHECK(ia_12345->count(ia_12345, 3) == 1);
+    CHECK(ia_12345->count(ia_12345, 4) == 1);
+    CHECK(ia_12345->count(ia_12345, 5) == 1);
+    CHECK(ia_12345->count(ia_12345, 6) == 0);
+    CHECK(ia_12345->count(ia_12345, 0) == 0);
+    CHECK(ia_12345->count(ia_12345, -1) == 0);
+    CHECK(ia_12345->count(ia_12345, -2) == 0);
   }
 
   SECTION("non-unique elements") {
     ia_12345->__array[1] = 5;
     ia_12345->__array[3] = 5;
-    CHECK(ia->count(ia_12345, 1) == 1);
-    CHECK(ia->count(ia_12345, 2) == 0);
-    CHECK(ia->count(ia_12345, 3) == 1);
-    CHECK(ia->count(ia_12345, 4) == 0);
-    CHECK(ia->count(ia_12345, 5) == 3);
-    CHECK(ia->count(ia_12345, 6) == 0);
-    CHECK(ia->count(ia_12345, 0) == 0);
-    CHECK(ia->count(ia_12345, -1) == 0);
-    CHECK(ia->count(ia_12345, -2) == 0);
+    CHECK(ia_12345->count(ia_12345, 1) == 1);
+    CHECK(ia_12345->count(ia_12345, 2) == 0);
+    CHECK(ia_12345->count(ia_12345, 3) == 1);
+    CHECK(ia_12345->count(ia_12345, 4) == 0);
+    CHECK(ia_12345->count(ia_12345, 5) == 3);
+    CHECK(ia_12345->count(ia_12345, 6) == 0);
+    CHECK(ia_12345->count(ia_12345, 0) == 0);
+    CHECK(ia_12345->count(ia_12345, -1) == 0);
+    CHECK(ia_12345->count(ia_12345, -2) == 0);
   }
 }
 
 
 TEST_CASE_METHOD(IntArrayFixture, "int_array", "[index]") {
-  CHECK(ia->index(ia_567, 0) == 5);
-  CHECK(ia->index(ia_567, 1) == 6);
-  CHECK(ia->index(ia_567, 2) == 7);
+  CHECK(ia_567->index(ia_567, 0) == 5);
+  CHECK(ia_567->index(ia_567, 1) == 6);
+  CHECK(ia_567->index(ia_567, 2) == 7);
 }
 
 
 TEST_CASE_METHOD(IntArrayFixture, "int_array", "[sum]") {
-  CHECK(ia->sum(ia_empty) == 0);
-  CHECK(ia->sum(ia_12345) == 15);
-  CHECK(ia->sum(ia_567) == 18);
+  CHECK(ia_empty->sum(ia_empty) == 0);
+  CHECK(ia_12345->sum(ia_12345) == 15);
+  CHECK(ia_567->sum(ia_567) == 18);
 }
 
 
 TEST_CASE_METHOD(IntArrayFixture, "int_array", "[add]") {
   SECTION("same size") {
-    IntArray* ia_actual = ia->add(ia_567, ia_567);
+    IntArray* ia_actual = ia_567->add(ia_567, ia_567);
     std::vector<int> expected = {10, 12, 14};
 
     std::vector<int> actual(ia_actual->__array, ia_actual->__array + 3);
@@ -311,8 +302,8 @@ TEST_CASE_METHOD(IntArrayFixture, "int_array", "[add]") {
   }
 
   SECTION("different size") {
-    IntArray* first = ia->add(ia_567, ia_12345);
-    IntArray* second = ia->add(ia_12345, ia_567);
+    IntArray* first = ia_567->add(ia_567, ia_12345);
+    IntArray* second = ia_12345->add(ia_12345, ia_567);
     std::vector<int> expected = {6, 8, 10, 4, 5};
 
     std::vector<int> first_actual(first->__array, first->__array + 5);
@@ -330,7 +321,7 @@ TEST_CASE_METHOD(IntArrayFixture, "int_array", "[add]") {
 
   SECTION("add empty") {
     std::vector<int> expected(ia_567->__array, ia_567->__array + 3);
-    IntArray* ia_actual = ia->add(ia_567, ia_empty);
+    IntArray* ia_actual = ia_567->add(ia_567, ia_empty);
     std::vector<int> actual(ia_actual->__array, ia_actual->__array + 3);
     CHECK(ia_actual->__elements == ia_567->__elements);
     CHECK_THAT(actual, Catch::Matchers::Equals(expected));
@@ -342,7 +333,7 @@ TEST_CASE_METHOD(IntArrayFixture, "int_array", "[add]") {
 
 TEST_CASE_METHOD(IntArrayFixture, "int_array", "[mul]") {
   SECTION("same size") {
-    IntArray* ia_actual = ia->mul(ia_567, ia_567);
+    IntArray* ia_actual = ia_567->mul(ia_567, ia_567);
     CHECK(ia_actual->__elements == ia_567->__elements);
     std::vector<int> expected = {25, 36, 49};
 
@@ -354,8 +345,8 @@ TEST_CASE_METHOD(IntArrayFixture, "int_array", "[mul]") {
   }
 
   SECTION("different size") {
-    IntArray* first = ia->mul(ia_567, ia_12345);
-    IntArray* second = ia->mul(ia_12345, ia_567);
+    IntArray* first = ia_567->mul(ia_567, ia_12345);
+    IntArray* second = ia_12345->mul(ia_12345, ia_567);
     CHECK(first->__elements == ia_12345->__elements);
     CHECK(second->__elements == ia_12345->__elements);
     std::vector<int> expected = {5, 12, 21, 4, 5};
@@ -373,7 +364,7 @@ TEST_CASE_METHOD(IntArrayFixture, "int_array", "[mul]") {
 
   SECTION("multiply with empty") {
     std::vector<int> expected(ia_567->__array, ia_567->__array + 3);
-    IntArray* ia_actual = ia->mul(ia_567, ia_empty);
+    IntArray* ia_actual = ia_567->mul(ia_567, ia_empty);
     CHECK(ia_actual->__elements == ia_567->__elements);
     std::vector<int> actual(ia_actual->__array, ia_actual->__array + 3);
     CHECK_THAT(actual, Catch::Matchers::Equals(expected));
