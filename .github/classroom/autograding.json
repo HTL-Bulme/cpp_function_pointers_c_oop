@@ -22,10 +22,17 @@
       "points": 1
     },
     {
-      "name": "Test CPP int_array implementation of `create`",
+      "name": "Test CPP int_array implementation of `construct` with default",
       "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
-      "run": "build/int_array_test [create]",
-      "timeout": 2.5,
+      "run": "build/int_array_test [construct_default]",
+      "timeout": 0.5,
+      "points": 1
+    },
+    {
+      "name": "Test CPP int_array implementation of `construct`",
+      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
+      "run": "build/int_array_test [construct]",
+      "timeout": 0.5,
       "points": 1
     },
     {

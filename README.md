@@ -1,22 +1,8 @@
-# Dynamic Memory Management (Free Store)
+# Using Function Pointers for C-style Object Orientation
 
-Exercise material for using the free store in the C++ programming language.
-In this homework you are asked to restrict yourself to not using any
-`include` except `<cstddef>` and `<iostream>`.
-
-Before creating a build to run the tests, it is important that all of the
-required files (`create_arrays.{cpp,hpp}`, `int_array.{cpp,hpp}`, `main.cpp`)
-are created alongside the `*_test.cpp` files. Until all required functions are
-declared in the header files, compilation will fail. Until all required
-functions are defined (an empty function body or returning a dummy value is
-sufficient), the linking won't succeed. In `main.cpp`, at least
-a dummy `main(.)` function is required for compilation. Do not add a `main(.)`
-function to your `create_arrays.cpp` or `int_array.cpp` files.
-With all this in place, compile and run the tests as described below.
 Implement `main(.)` in a separate module called `main.cpp`. Include all header
 files of this exercise and use all of the implemented functions.
-Have `main(.)` print the data and never forget to use `delete` / `delete[]`.
-Explain in a comment, why `delete` and `delete[]` has to be used.
+Have `main(.)` print the data and don't forget to use your "destructor".
 
 Create the source and header files as required by the description of the
 exercise below. Then compile your solution:
@@ -28,51 +14,28 @@ make -j8
 ```
 
 
-## Create Arrays on the Free Store
+## Create Your Own `int` Array Data Type
 
-Implement the following functions:
-
-```cpp
-/*! Return array on the free store containing `dimension` zeros.
- *
- * The memory for the array is allocated on the heap and all values are
- * initialized to zero.
- *
- * eg. zeros(3) -> {0, 0, 0}
-*/
-int* zeros(std::size_t dimension);
-
-//! Return array on the free store containing `dimension` ones.
-int* ones(std::size_t dimension);
-
-//! Return array on the free store containing `0, 1, 2, 3, ..., dimension-1`.
-int* range(std::size_t dimension);
-```
-
-Name the source file: `create_arrays.cpp` and the corresponding header file
-`create_arrays.hpp`.
-
-
-## Create Your Own int Array Data Type
-
-Implement a data structure IntArray that helps you to work with arrays of
+Implement a data structure `IntArray` that helps you to work with arrays of
 dynamic size. The core of the data type should be a struct storing a pointer
 to an array on the free store and the required metadata. All of your functions
-as well as `IntArray` itself must be placed inside of a namespace called `ia`.
+as well as `IntArray` itself must be placed inside of a namespace called `ia`
+(data structures). This exercise is almost identical to the prior free store
+exercise. However, this time use function pointers to provide all
+functionality directly as part of the `IntArray` instances.
 
-```cpp
-struct IntArray {
-  std::size_t reserved;  ///< available storage
-  std::size_t elements;  ///< current number of elements
-  int* array;
-};
-```
+As usual, place the declarations in the header file and the implementations
+in the `cpp` source file. Consult the [test cases](int_array_test.cpp) for
+details.
 
 Implement the following API to create and work with `IntArray`:
 
 ```cpp
 //! Create new empty IntArray for 100 elements.
-IntArray* create();
+IntArray* construct();
+
+//! Create new empty IntArray for `dimension` elements.
+IntArray* construct(std::size_t dimension);
 
 //! Create new array with `dimension` zeros.
 IntArray* zeros(std::size_t dimension);
@@ -84,7 +47,7 @@ IntArray* ones(std::size_t dimension);
 IntArray* range(int start, int stop);
 
 //! Free the array and the IntArray struct; return `nullptr`.
-IntArray* destroy(IntArray* ia);
+IntArray* destruct(IntArray* ia);
 
 //! Remove and return last element of `ia`
 int pop_back(IntArray* ia);
@@ -142,6 +105,13 @@ consistent at all times. For example, adding an element must also increase the
 value of `elements` and, if needed, the value of `reserved`. Use and
 thoroughly test your implementation in a designated `main(.)` function
 in `main.cpp`.
+
+In this implementation, users shall not touch the internal data (number
+of reserved elements, number of actual elements and the internal array.
+To help enforce this, hint users that internal data is not to be touched by
+preceeding it with two underscores. For example, `reserved` must be called
+`__reserved` instead. Functions that are meant to be used by others
+(the "public API") must not have preceding underscores
 
 Name the source file: `int_array.cpp` and the corresponding header
 file `int_array.hpp`.
