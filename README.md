@@ -1,4 +1,4 @@
-# Using Function Pointers for C-style Object Orientation
+# Function Pointers for C-style Object Orientation
 
 Implement `main(.)` in a separate module called `main.cpp`. Include all header
 files of this exercise and use all of the implemented functions.
