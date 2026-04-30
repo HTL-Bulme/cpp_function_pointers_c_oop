@@ -4,13 +4,18 @@ Implement `main(.)` in a separate module called `main.cpp`. Include all header
 files of this exercise and use all of the implemented functions.
 Have `main(.)` print the data and don't forget to use your "destructor".
 
+The autotests included in this task are explicitly part of the assignment.
+The namespaces used in these tests must be implemented correctly.
+After finishing the below tasks, run the following commands to see if your code
+is correct. Note that a current version of `libcatch2-dev` has to be installed.
+
 Create the source and header files as required by the description of the
 exercise below. Then compile your solution:
 
 ```
 mkdir -p build && cd build
 cmake ..
-make -j8
+make -j
 ```
 
 

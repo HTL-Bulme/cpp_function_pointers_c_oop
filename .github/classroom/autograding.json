@@ -2,105 +2,91 @@
   "tests": [
     {
       "name": "Test CPP int_array implementation of `construct` with default",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
+      "setup": "sudo apt install --assume-yes catch2; mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [construct_default]",
       "timeout": 2.5,
       "points": 0.5
     },
     {
       "name": "Test CPP int_array implementation of `construct`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [construct]",
       "timeout": 0.5,
       "points": 0.5
     },
     {
       "name": "Test CPP int_array implementation of `zeros`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [zeros]",
       "timeout": 0.5,
       "points": 0.5
     },
     {
       "name": "Test CPP int_array implementation of `ones`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [ones]",
       "timeout": 0.5,
       "points": 0.5
     },
     {
       "name": "Test CPP int_array implementation of `range`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [range]",
       "timeout": 0.5,
       "points": 0.5
     },
     {
       "name": "Test CPP int_array implementation of `destroy`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [destruct]",
       "timeout": 0.5,
       "points": 0.5
     },
     {
       "name": "Test CPP int_array implementation of `push_back`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [push_back]",
       "timeout": 0.5,
       "points": 1
     },
     {
       "name": "Test CPP int_array implementation of `insert`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [insert]",
       "timeout": 0.5,
       "points": 1
     },
     {
       "name": "Test CPP int_array implementation of `pop_back`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [pop_back]",
       "timeout": 0.5,
       "points": 0.5
     },
     {
       "name": "Test CPP int_array implementation of `size`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [size]",
       "timeout": 0.5,
       "points": 0.5
     },
     {
       "name": "Test CPP int_array implementation of `count`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [count]",
       "timeout": 0.5,
       "points": 0.5
     },
     {
       "name": "Test CPP int_array implementation of `index`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [index]",
       "timeout": 0.5,
       "points": 0.5
     },
     {
       "name": "Test CPP int_array implementation of `sum`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [sum]",
       "timeout": 0.5,
       "points": 0.5
     },
     {
       "name": "Test CPP int_array implementation of `add`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [add]",
       "timeout": 0.5,
       "points": 1
     },
     {
       "name": "Test CPP int_array implementation of `mul`",
-      "setup": "mkdir -p build && cd build; cmake ..; make -j4 int_array_test",
       "run": "build/int_array_test [mul]",
       "timeout": 0.5,
       "points": 1
